@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Social Media Integration</string>
+
+    <string name="facebook_app_id">471204914105817</string>
+    <string name="fb_login_protocol_scheme">fb471204914105817</string>
+
+</resources>
