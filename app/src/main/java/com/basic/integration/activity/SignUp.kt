@@ -83,16 +83,17 @@ class SignUp : AppCompatActivity() {
                     task ->
 
                     if (task.isSuccessful){
-                        val userDetails = Users(auth.currentUser.uid,name.text.toString(),emailEdt.text.toString(),phoneEdt.text.toString(),"None")
-                        userDetailsRef.child(auth.currentUser.uid).setValue(userDetails).addOnCompleteListener(this){
-                                task ->
-                            if (task.isSuccessful){
-                                dialog.dismiss()
-                                startActivity(Intent(this, UserDetails::class.java))
-                                finish()
-                            }else{
-                                dialog.dismiss()
-                                Toast.makeText(this,task.exception.toString(),Toast.LENGTH_SHORT).show()
+                        val userDetails = auth.currentUser?.uid?.let { it1 -> Users(it1,name.text.toString(),emailEdt.text.toString(),phoneEdt.text.toString(),"None") }
+                        auth.currentUser?.uid?.let { it1 ->
+                            userDetailsRef.child(it1).setValue(userDetails).addOnCompleteListener(this){ task ->
+                                if (task.isSuccessful){
+                                    dialog.dismiss()
+                                    startActivity(Intent(this, UserDetails::class.java))
+                                    finish()
+                                }else{
+                                    dialog.dismiss()
+                                    Toast.makeText(this,task.exception.toString(),Toast.LENGTH_SHORT).show()
+                                }
                             }
                         }
                     }else{

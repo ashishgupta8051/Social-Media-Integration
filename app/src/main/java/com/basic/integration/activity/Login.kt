@@ -246,7 +246,7 @@ class Login : AppCompatActivity() {
     }
 
     private fun checkUserForGoogle(ProgressDialog: AlertDialog) {
-        firebaseUser = firebaseAuth.currentUser
+        firebaseUser = firebaseAuth.currentUser!!
         userDetailsRef.child(firebaseUser.uid).addListenerForSingleValueEvent(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()){
@@ -258,7 +258,12 @@ class Login : AppCompatActivity() {
                     val email = firebaseUser.email
                     val photoUrl = firebaseUser.photoUrl.toString()
 
-                    val userDetails = Users(firebaseUser.uid,name,email,"No Phone Number",photoUrl)
+                    val userDetails =
+                        name?.let {
+                            if (email != null) {
+                                Users(firebaseUser.uid, it,email,"No Phone Number",photoUrl)
+                            }
+                        }
                     userDetailsRef.child(firebaseUser.uid).setValue(userDetails).addOnCompleteListener(this@Login){
                             task ->
 
@@ -281,7 +286,7 @@ class Login : AppCompatActivity() {
     }
 
     private fun checkUserForFacebook(ProgressDialog: AlertDialog) {
-        firebaseUser = firebaseAuth.currentUser
+        firebaseUser = firebaseAuth.currentUser!!
         userDetailsRef.child(firebaseUser.uid).addListenerForSingleValueEvent(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()){
@@ -293,7 +298,8 @@ class Login : AppCompatActivity() {
                     val email = firebaseUser.email
                     val photoUrl = firebaseUser.photoUrl.toString()
 
-                    val userDetails = Users(firebaseUser.uid,name,email,"No Phone Number",photoUrl)
+                    val userDetails = Users(firebaseUser.uid,
+                        name!!, email!!,"No Phone Number",photoUrl)
                     userDetailsRef.child(firebaseUser.uid).setValue(userDetails).addOnCompleteListener(this@Login){
                             task ->
 
